@@ -57,17 +57,20 @@ class MedicalServiceImplTest {
     }
 
     @Test
-    void checkTemperatureAndBloodPressureWithoutErrorTest() {
+    void checkBloodPressureWithoutErrorTest() {
+        BloodPressure currentPressure = new BloodPressure(120, 80);
+        medicalService.checkBloodPressure(patientInfoRepository.add(patientInfo), currentPressure);
+
+        ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
+        Mockito.verify(sendAlertService, Mockito.times(0)).send(argumentCaptor.capture());
+    }
+
+    @Test
+    void checkTemperatureWithoutErrorTest() {
         BigDecimal currentTemperature = new BigDecimal("36.5");
         medicalService.checkTemperature(patientInfoRepository.add(patientInfo), currentTemperature);
 
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
-        Mockito.verify(sendAlertService, Mockito.times(0)).send(argumentCaptor.capture());
-
-        BloodPressure currentPressure = new BloodPressure(120, 80);
-        medicalService.checkBloodPressure(patientInfoRepository.add(patientInfo), currentPressure);
-
-        argumentCaptor = ArgumentCaptor.forClass(String.class);
         Mockito.verify(sendAlertService, Mockito.times(0)).send(argumentCaptor.capture());
     }
 }
